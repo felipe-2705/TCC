@@ -80,9 +80,14 @@ let matriz02 = [
     [0,1]
 ];
 
+let matriz03 = [
+    [2,1],
+    [1,2]
+];
+
 /////////////////// criando as urnas //////////////////////////
 let urna01 = new Urna(3,2,matriz01);  // ambas começam com 3 bolas azuis e 2 bolas brancas//
-let urna02 = new Urna(3,2,matriz02);
+let urna02 = new Urna(3,2,matriz03);
 
 urna01.init();
 urna02.init();
@@ -93,3 +98,4 @@ urna01.emular(1000);
 
 console.log("Simulando Urna 02: ");
 urna02.emular(1000);
+
