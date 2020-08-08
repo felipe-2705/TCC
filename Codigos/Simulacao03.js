@@ -1,12 +1,52 @@
+<html lang="pt-br">
+    <head>
+    
+</head>
+<body>
 
-    function gera_random(max,min){
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+
+</script>
+<script type="text/javascript" >
+  google.charts.load('current',  packages: ['corechart'] );
+  google.charts.setOnLoadCallback(drawChart); 
+  
+  
+  </script>
+</body>
+</html>
+
+function gera_random(max,min){
        
     return Math.floor(Math.random()*(max-min+1)) + min
 
 }
 
 
+function drawChart(blue,white) {
 
+    let array = []
+
+    for(i = 0;i<blue.length;i++){
+        array.push([i,blue[i],white[i]]);
+    }
+    
+    array.push(['Passos','Blue','White'])
+     
+    var data = google.visualization.arrayToDataTable(array);
+
+    var options = {
+      title: 'Evoluçao das cores pelo tempo',
+      curveType: 'function',
+      legend: { position: 'bottom' },
+      colors: ['blue','white'] 
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+    chart.draw(data, options);
+  }
+ 
 
 
 
@@ -127,7 +167,3 @@ urna03.emular(1000);
 console.log("Razao bolas Azuis: " + (urna03.bolas[0]/urna03.s ));
 console.log("Razao bolas Brancas: " + (urna03.bolas[1]/urna03.s ));
 
-
-
-
-document.body.innerHTML = "Graficos"
