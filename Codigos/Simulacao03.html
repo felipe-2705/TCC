@@ -110,8 +110,8 @@ function gera_random(max,min){
    ];
    
    let matriz02 = [
-       [1,0],
-       [0,1]
+       [2,5],
+       [7,4]
    ];
    
    let matriz03 = [
@@ -142,7 +142,7 @@ function gera_random(max,min){
    console.log("Razao bolas Brancas: " + (urna02.bolas[1]/urna02.s ));*/
    
    console.log("Simulando Urna 04: ");
-   urna03.emular(1000);
+   urna03.emular(5000);
    console.log("Razao bolas Azuis: " + (urna03.bolas[0]/urna03.s ));
    console.log("Razao bolas Brancas: " + (urna03.bolas[1]/urna03.s ));
  
@@ -166,7 +166,7 @@ function gera_random(max,min){
 
    array[0]=['Passos','Blue','Red'] 
    
-   for(i = 1;i<1000;i++){
+   for(i = 1;i<5000;i++){
        array[i]= [(i-1).toString(),urna03.Vcores[i-1][0],urna03.Vcores[i-1][1]];
    }
    
