@@ -1,0 +1,12 @@
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\bin\Debug\SimuladorUrnPolya.exe.config
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\bin\Debug\SimuladorUrnPolya.exe
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\bin\Debug\SimuladorUrnPolya.pdb
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.csprojAssemblyReference.cache
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.Properties.Resources.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.csproj.GenerateResource.cache
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.csproj.CoreCompileInputs.cache
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.exe
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.pdb
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.Urn.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.F_InsertBallsNumbers.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.F_matrix.resources
