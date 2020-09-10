@@ -5,9 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
+using UrnPolya;
+
 
 namespace SimuladorUrnPolya
 {
@@ -18,12 +21,22 @@ namespace SimuladorUrnPolya
         public List<string> ColorsUsedList = new List<string>();
         public int[] Colorsnumbers;
         public int[,] repositionMatrix;
-
+        private string selectChartType ;
+        private int steps;
+        private int simulations;
         public Urn()
         {
             InitializeComponent();
             Colors_listCheckBox.SetItemChecked(0, true);
             Colors_listCheckBox.SetItemChecked(1, true);
+            foreach (string s in Colors_listCheckBox.CheckedItems)
+            {
+
+                if (!this.ColorsUsedList.Contains(s))
+                {
+                    this.ColorsUsedList.Add(s);
+                }
+            }
             ColorsTotalNumber = 2;
             
         }
@@ -68,6 +81,16 @@ namespace SimuladorUrnPolya
             Colors_listCheckBox.Items.Add("Brown");
             Colors_listCheckBox.SetItemChecked(0, true);
             Colors_listCheckBox.SetItemChecked(1, true);
+            this.ColorsUsedList.Clear();
+            foreach (string s in Colors_listCheckBox.CheckedItems)
+            {
+
+               
+             
+                    this.ColorsUsedList.Add(s);
+                
+            }
+            ColorsTotalNumber = 2;
 
         }
 
@@ -78,7 +101,16 @@ namespace SimuladorUrnPolya
 
         private void Colors_listCheckBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            this.ColorsUsedList.Clear();
+            foreach (string s in Colors_listCheckBox.CheckedItems)
+            {
+
+                if (!this.ColorsUsedList.Contains(s))
+                {
+                    this.ColorsUsedList.Add(s);
+                }
+            }
+            this.ColorsTotalNumber = this.ColorsUsedList.Count;
         }
 
         #endregion
@@ -96,36 +128,41 @@ namespace SimuladorUrnPolya
        
 
         private void btn_defineMatrix_Click(object sender, EventArgs e)
-        {
-            F_matrix f_matrix = new F_matrix(this.ColorsUsedList, out this.repositionMatrix);
+        {   
+            if(this.repositionMatrix == null)
+            {
+                this.repositionMatrix = new int[this.ColorsTotalNumber, this.ColorsTotalNumber];
+            }
+            F_matrix f_matrix = new F_matrix(this.ColorsUsedList, ref this.repositionMatrix);
             f_matrix.ShowDialog();
 
         }
-
+        #endregion
         private void btn_Confirm_Click(object sender, EventArgs e)
         {
-
-         
-            ColorsTotalNumber = this.ColorsUsedList.Count;
-            string txt = ColorsTotalNumber.ToString()+"\n";
-            int i = 0;
-            foreach(string s in this.ColorsUsedList)
-            {   
-          
-                txt += this.Colorsnumbers[i++].ToString()+": "+ s+"\n";
-            }
-
-            for(i = 0; i < this.ColorsTotalNumber; i++)
+            if (this.ColorsTotalNumber < 2 || this.repositionMatrix == null || this.Colorsnumbers == null)
             {
-                for(int j = 0; j < this.ColorsTotalNumber; j++)
-                {
-                    txt += this.repositionMatrix[i, j].ToString()+" ";
-                }
-                txt += "\n";
+                MessageBox.Show("Please, insert all necessary information before continue if your simulation");
             }
 
-            MessageBox.Show(txt);
+        
+
+            switch (this.selectChartType) 
+            {
+                case "Corrida de cores":
+                    this.backgroundWorker2.RunWorkerAsync();
+                    break;
+                case "Probabilidade de razoes para cada cor":
+                    this.backgroundWorker.RunWorkerAsync();
+                    break;
+            }
         }
+
+      
+
+        
+
+     
 
         private void lb_steps_Click(object sender, EventArgs e)
         {
@@ -138,26 +175,102 @@ namespace SimuladorUrnPolya
 
         }
 
-        #endregion
+        
 
         private void Colors_listCheckBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
 
-            foreach (string s in Colors_listCheckBox.CheckedItems)
-            {
-
-                if (!this.ColorsUsedList.Contains(s))
-                {
-                    this.ColorsUsedList.Add(s);
-                }
-            }
-
-            if(e.NewValue == CheckState.Checked)
+            if (e.NewValue == CheckState.Checked)
             {
                 this.ColorsUsedList.Add(Colors_listCheckBox.Items[e.Index].ToString());
 
             }
+            this.ColorsTotalNumber = this.ColorsUsedList.Count;
+
 
         }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.selectChartType = op_graficos.Text;
+        }
+        #region Probability Chart Worker functions
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.PrintChart(this.backgroundWorker);
+        }
+
+        
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.SimulationProgress.Value = e.ProgressPercentage;
+            this.SimulationProgress.Update();
+        }
+
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+        }
+
+        public void PrintChart(BackgroundWorker b)
+        {
+
+            if (!int.TryParse(this.tb_Steps.Text, out this.steps))
+            {
+                MessageBox.Show("Please insert a valid value to the steps box");
+                b.CancelAsync();
+                return;
+            }
+
+            if (!int.TryParse(this.tb_simulations.Text, out this.simulations))
+            {
+                MessageBox.Show("Please insert a valid value to the simulations box");
+                b.CancelAsync();
+                return;
+            }
+            UrnPolya.Urn a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
+            List<double[]> r = UrnPolya.Urn.probability_of_colors_ration(a, steps, simulations, b);
+
+
+            F_grafico f = new F_grafico(r, this.ColorsUsedList);
+            f.ShowDialog();
+        }
+        #endregion
+
+        #region ColorRunWorker functions
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.printColorRunChart(this.backgroundWorker2);
+        }
+
+        private void backgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.SimulationProgress.Value = e.ProgressPercentage;
+            this.SimulationProgress.Update();
+
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        public void printColorRunChart(BackgroundWorker b)
+        {
+            if (!int.TryParse(this.tb_Steps.Text, out this.steps))
+            {
+                MessageBox.Show("Please insert a valid value to the steps box");
+                b.CancelAsync();
+                return;
+            }
+
+            UrnPolya.Urn u = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
+            u.simulation(steps, this.backgroundWorker2);
+            double[,] result = u.getProportions();
+
+            F_grafico f_grafico = new F_grafico(result, this.ColorsUsedList, steps + 1);
+            f_grafico.ShowDialog();
+        }
+        #endregion
     }
 }

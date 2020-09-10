@@ -42,6 +42,11 @@
             this.tb_NewColor = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.op_graficos = new System.Windows.Forms.ComboBox();
+            this.lb_simulations = new System.Windows.Forms.Label();
+            this.tb_simulations = new System.Windows.Forms.TextBox();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +81,7 @@
             this.btn_defineMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_defineMatrix.Location = new System.Drawing.Point(2, 252);
             this.btn_defineMatrix.Name = "btn_defineMatrix";
-            this.btn_defineMatrix.Size = new System.Drawing.Size(249, 29);
+            this.btn_defineMatrix.Size = new System.Drawing.Size(254, 29);
             this.btn_defineMatrix.TabIndex = 7;
             this.btn_defineMatrix.Text = "Define Matrix";
             this.btn_defineMatrix.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -93,7 +98,7 @@
             this.btn_Confirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Confirm.Location = new System.Drawing.Point(2, 287);
             this.btn_Confirm.Name = "btn_Confirm";
-            this.btn_Confirm.Size = new System.Drawing.Size(249, 27);
+            this.btn_Confirm.Size = new System.Drawing.Size(254, 27);
             this.btn_Confirm.TabIndex = 8;
             this.btn_Confirm.Text = "Simulate";
             this.btn_Confirm.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -107,7 +112,7 @@
             this.SimulationProgress.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.SimulationProgress.Location = new System.Drawing.Point(2, 320);
             this.SimulationProgress.Name = "SimulationProgress";
-            this.SimulationProgress.Size = new System.Drawing.Size(249, 27);
+            this.SimulationProgress.Size = new System.Drawing.Size(254, 27);
             this.SimulationProgress.TabIndex = 9;
             // 
             // lb_steps
@@ -200,12 +205,64 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Balls";
             // 
+            // op_graficos
+            // 
+            this.op_graficos.FormattingEnabled = true;
+            this.op_graficos.Items.AddRange(new object[] {
+            "Corrida de cores",
+            "Probabilidade de razoes para cada cor"});
+            this.op_graficos.Location = new System.Drawing.Point(6, 2);
+            this.op_graficos.Name = "op_graficos";
+            this.op_graficos.Size = new System.Drawing.Size(121, 21);
+            this.op_graficos.TabIndex = 13;
+            this.op_graficos.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // lb_simulations
+            // 
+            this.lb_simulations.AutoSize = true;
+            this.lb_simulations.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_simulations.Location = new System.Drawing.Point(118, 216);
+            this.lb_simulations.Name = "lb_simulations";
+            this.lb_simulations.Size = new System.Drawing.Size(77, 16);
+            this.lb_simulations.TabIndex = 14;
+            this.lb_simulations.Text = "Simulations";
+            this.lb_simulations.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // tb_simulations
+            // 
+            this.tb_simulations.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_simulations.Location = new System.Drawing.Point(196, 216);
+            this.tb_simulations.Name = "tb_simulations";
+            this.tb_simulations.Size = new System.Drawing.Size(60, 26);
+            this.tb_simulations.TabIndex = 15;
+            this.tb_simulations.Text = "0";
+            this.tb_simulations.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.WorkerReportsProgress = true;
+            this.backgroundWorker.WorkerSupportsCancellation = true;
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.WorkerReportsProgress = true;
+            this.backgroundWorker2.WorkerSupportsCancellation = true;
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
+            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            // 
             // Urn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(254, 361);
+            this.ClientSize = new System.Drawing.Size(259, 362);
+            this.Controls.Add(this.tb_simulations);
+            this.Controls.Add(this.lb_simulations);
+            this.Controls.Add(this.op_graficos);
             this.Controls.Add(this.lb_steps);
             this.Controls.Add(this.tb_Steps);
             this.Controls.Add(this.SimulationProgress);
@@ -239,6 +296,11 @@
         private System.Windows.Forms.TextBox tb_NewColor;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ComboBox op_graficos;
+        private System.Windows.Forms.Label lb_simulations;
+        private System.Windows.Forms.TextBox tb_simulations;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }
 

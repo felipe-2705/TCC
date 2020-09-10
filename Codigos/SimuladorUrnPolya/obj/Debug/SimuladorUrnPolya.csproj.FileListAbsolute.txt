@@ -10,3 +10,4 @@ C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.pdb
 C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.Urn.resources
 C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.F_InsertBallsNumbers.resources
 C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.F_matrix.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Debug\SimuladorUrnPolya.F_grafico.resources

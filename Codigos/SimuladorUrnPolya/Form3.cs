@@ -18,16 +18,15 @@ namespace SimuladorUrnPolya
         private int size;
         private List<string> colors;
         private TextBox[,] tb_handler;
-        public F_matrix(List<string> colors,out int[,] m)
+        public F_matrix(List<string> colors,ref int[,] m)
         {
             this.size = colors.Count;
             this.tb_handler = new TextBox[size, size];
-            m= new int[size, size];
             this.matrix = m;
             this.colors = colors;
             InitializeComponent();
             this.createMatrix();
-            this.createButtons();
+            
             
         }
 
@@ -77,7 +76,7 @@ namespace SimuladorUrnPolya
                 for(j = 1;j < this.size + 1; j++)
                 {
                     TextBox tb = new TextBox();
-                    tb.Text = "0";
+                    tb.Text = this.matrix[i-1,j-1].ToString();
                     tb.Size = new Size(50, 50);
                     tb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
                     tableLayoutPanel1.Controls.Add(tb, i, j);
@@ -87,6 +86,7 @@ namespace SimuladorUrnPolya
 
             }
 
+            this.tableLayoutPanel1.Dock = DockStyle.Fill;
             this.Controls.Add(this.tableLayoutPanel1);
 
 
@@ -95,28 +95,7 @@ namespace SimuladorUrnPolya
 
             
         }
-
-        private void createButtons()
-        {
-            int newY = this.tableLayoutPanel1.Location.Y + this.tableLayoutPanel1.Size.Height + 10;
-            
-            this.flowLayoutPanel.Location = new Point(0,newY );
-
-            Button btn_confirm = new Button();
-            btn_confirm.Text = "Confirm";
-            btn_confirm.Size = new Size(100, 20);
-            btn_confirm.Click += new System.EventHandler(btn_confirm_click_event);
-            this.AcceptButton = btn_confirm;
-            this.flowLayoutPanel.Controls.Add(btn_confirm);
-
-            Button btn_cancel = new Button();
-            btn_cancel.Text = "Cancel";
-            btn_cancel.Size = new Size(100, 20);
-            btn_cancel.Click += new System.EventHandler(btn_cancel_click_event);
-            this.CancelButton = btn_cancel;
-            this.flowLayoutPanel.Controls.Add(btn_cancel);
-        }
-
+      
         private void btn_confirm_click_event(object sender, EventArgs e)
         {
             int number;
@@ -132,7 +111,7 @@ namespace SimuladorUrnPolya
                     else
                     {
                         MessageBox.Show("Please, insert a valid value", "Error: Value is not integer type");
-                        break;
+                        return;
                     }
                 }
             }
