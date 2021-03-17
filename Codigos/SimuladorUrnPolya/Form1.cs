@@ -22,8 +22,11 @@ namespace SimuladorUrnPolya
         public int[] Colorsnumbers;
         public int[,] repositionMatrix;
         private string selectChartType ;
+        private string selectSimulationType;
         private int steps;
         private int simulations;
+        private double[] probabilities;
+        private double memorylapse_probability;
         public Urn()
         {
             InitializeComponent();
@@ -143,6 +146,7 @@ namespace SimuladorUrnPolya
             if (this.ColorsTotalNumber < 2 || this.repositionMatrix == null || this.Colorsnumbers == null)
             {
                 MessageBox.Show("Please, insert all necessary information before continue if your simulation");
+                return;
             }
 
         
@@ -228,7 +232,23 @@ namespace SimuladorUrnPolya
                 b.CancelAsync();
                 return;
             }
-            UrnPolya.Urn a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
+            UrnPolya.Urn a;
+            switch (this.selectSimulationType)
+            {
+                case "Memory Lapse":
+                    if(this.probabilities == null)
+                    {
+                        MessageBox.Show("Please first insert the probabilities");
+                        return;
+                    }
+                    a = new UrnPolya.Urn_memory_lapse(this.repositionMatrix, this.Colorsnumbers, this.memorylapse_probability, this.probabilities);
+                    break;
+                default:
+                    a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
+                    break;
+                    
+
+            }
             List<double[]> r = UrnPolya.Urn.probability_of_colors_ration(a, steps, simulations, b);
 
 
@@ -264,13 +284,41 @@ namespace SimuladorUrnPolya
                 return;
             }
 
-            UrnPolya.Urn u = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
-            u.simulation(steps, this.backgroundWorker2);
-            double[,] result = u.getProportions();
+            UrnPolya.Urn a;
+            switch (this.selectSimulationType)
+            {
+                case "Memory Lapse":
+                    if (this.probabilities == null)
+                    {
+                        MessageBox.Show("Please first insert the probabilities");
+                        return;
+                    }
+                    a = new UrnPolya.Urn_memory_lapse(this.repositionMatrix, this.Colorsnumbers, this.memorylapse_probability, this.probabilities);
+                    break;
+                default:
+                    a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
+                    break;
+
+
+            }
+            a.simulation(steps, this.backgroundWorker2);
+            double[,] result = a.getProportions();
 
             F_grafico f_grafico = new F_grafico(result, this.ColorsUsedList, steps + 1);
             f_grafico.ShowDialog();
         }
         #endregion
+
+        private void btn_insertProbabilities_Click(object sender, EventArgs e)
+        {
+            this.probabilities = new double[this.ColorsTotalNumber];
+            F_insertProbabilities f = new F_insertProbabilities(this.ColorsUsedList, ref this.memorylapse_probability,ref this.probabilities);
+            f.ShowDialog();
+        }
+
+        private void cb_simulationProcess_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.selectSimulationType = this.cb_simulationProcess.Text;
+        }
     }
 }

@@ -47,6 +47,10 @@
             this.tb_simulations = new System.Windows.Forms.TextBox();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.lb_grafico = new System.Windows.Forms.Label();
+            this.lb_simulationProcess = new System.Windows.Forms.Label();
+            this.cb_simulationProcess = new System.Windows.Forms.ComboBox();
+            this.btn_insertProbabilities = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,7 +83,7 @@
             this.btn_defineMatrix.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_defineMatrix.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
             this.btn_defineMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_defineMatrix.Location = new System.Drawing.Point(2, 252);
+            this.btn_defineMatrix.Location = new System.Drawing.Point(2, 325);
             this.btn_defineMatrix.Name = "btn_defineMatrix";
             this.btn_defineMatrix.Size = new System.Drawing.Size(254, 29);
             this.btn_defineMatrix.TabIndex = 7;
@@ -96,7 +100,7 @@
             this.btn_Confirm.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_Confirm.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
             this.btn_Confirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Confirm.Location = new System.Drawing.Point(2, 287);
+            this.btn_Confirm.Location = new System.Drawing.Point(2, 360);
             this.btn_Confirm.Name = "btn_Confirm";
             this.btn_Confirm.Size = new System.Drawing.Size(254, 27);
             this.btn_Confirm.TabIndex = 8;
@@ -110,7 +114,7 @@
             this.SimulationProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SimulationProgress.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.SimulationProgress.Location = new System.Drawing.Point(2, 320);
+            this.SimulationProgress.Location = new System.Drawing.Point(2, 393);
             this.SimulationProgress.Name = "SimulationProgress";
             this.SimulationProgress.Size = new System.Drawing.Size(254, 27);
             this.SimulationProgress.TabIndex = 9;
@@ -119,7 +123,7 @@
             // 
             this.lb_steps.AutoSize = true;
             this.lb_steps.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_steps.Location = new System.Drawing.Point(3, 216);
+            this.lb_steps.Location = new System.Drawing.Point(-1, 280);
             this.lb_steps.Name = "lb_steps";
             this.lb_steps.Size = new System.Drawing.Size(43, 16);
             this.lb_steps.TabIndex = 10;
@@ -130,7 +134,7 @@
             // tb_Steps
             // 
             this.tb_Steps.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_Steps.Location = new System.Drawing.Point(52, 216);
+            this.tb_Steps.Location = new System.Drawing.Point(48, 280);
             this.tb_Steps.Name = "tb_Steps";
             this.tb_Steps.Size = new System.Drawing.Size(60, 26);
             this.tb_Steps.TabIndex = 11;
@@ -198,7 +202,7 @@
             this.groupBox1.Controls.Add(this.btn_startBallsNumbers);
             this.groupBox1.Controls.Add(this.btn_ResetColors);
             this.groupBox1.Controls.Add(this.Colors_listCheckBox);
-            this.groupBox1.Location = new System.Drawing.Point(2, 38);
+            this.groupBox1.Location = new System.Drawing.Point(2, 109);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(247, 165);
             this.groupBox1.TabIndex = 12;
@@ -211,7 +215,7 @@
             this.op_graficos.Items.AddRange(new object[] {
             "Corrida de cores",
             "Probabilidade de razoes para cada cor"});
-            this.op_graficos.Location = new System.Drawing.Point(6, 2);
+            this.op_graficos.Location = new System.Drawing.Point(128, 5);
             this.op_graficos.Name = "op_graficos";
             this.op_graficos.Size = new System.Drawing.Size(121, 21);
             this.op_graficos.TabIndex = 13;
@@ -221,7 +225,7 @@
             // 
             this.lb_simulations.AutoSize = true;
             this.lb_simulations.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_simulations.Location = new System.Drawing.Point(118, 216);
+            this.lb_simulations.Location = new System.Drawing.Point(113, 280);
             this.lb_simulations.Name = "lb_simulations";
             this.lb_simulations.Size = new System.Drawing.Size(77, 16);
             this.lb_simulations.TabIndex = 14;
@@ -231,7 +235,7 @@
             // tb_simulations
             // 
             this.tb_simulations.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_simulations.Location = new System.Drawing.Point(196, 216);
+            this.tb_simulations.Location = new System.Drawing.Point(196, 280);
             this.tb_simulations.Name = "tb_simulations";
             this.tb_simulations.Size = new System.Drawing.Size(60, 26);
             this.tb_simulations.TabIndex = 15;
@@ -254,12 +258,62 @@
             this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
             this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
+            // lb_grafico
+            // 
+            this.lb_grafico.AutoSize = true;
+            this.lb_grafico.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_grafico.Location = new System.Drawing.Point(-1, 6);
+            this.lb_grafico.Name = "lb_grafico";
+            this.lb_grafico.Size = new System.Drawing.Size(74, 16);
+            this.lb_grafico.TabIndex = 16;
+            this.lb_grafico.Text = "Chart Type";
+            // 
+            // lb_simulationProcess
+            // 
+            this.lb_simulationProcess.AutoSize = true;
+            this.lb_simulationProcess.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_simulationProcess.Location = new System.Drawing.Point(-1, 42);
+            this.lb_simulationProcess.Name = "lb_simulationProcess";
+            this.lb_simulationProcess.Size = new System.Drawing.Size(123, 16);
+            this.lb_simulationProcess.TabIndex = 17;
+            this.lb_simulationProcess.Text = "Simulation Process";
+            // 
+            // cb_simulationProcess
+            // 
+            this.cb_simulationProcess.FormattingEnabled = true;
+            this.cb_simulationProcess.Items.AddRange(new object[] {
+            "Standard",
+            "Memory Lapse"});
+            this.cb_simulationProcess.Location = new System.Drawing.Point(128, 42);
+            this.cb_simulationProcess.Name = "cb_simulationProcess";
+            this.cb_simulationProcess.Size = new System.Drawing.Size(121, 21);
+            this.cb_simulationProcess.TabIndex = 18;
+            this.cb_simulationProcess.SelectedIndexChanged += new System.EventHandler(this.cb_simulationProcess_SelectedIndexChanged);
+            // 
+            // btn_insertProbabilities
+            // 
+            this.btn_insertProbabilities.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btn_insertProbabilities.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_insertProbabilities.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
+            this.btn_insertProbabilities.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_insertProbabilities.Location = new System.Drawing.Point(62, 76);
+            this.btn_insertProbabilities.Name = "btn_insertProbabilities";
+            this.btn_insertProbabilities.Size = new System.Drawing.Size(131, 27);
+            this.btn_insertProbabilities.TabIndex = 19;
+            this.btn_insertProbabilities.Text = "Insert Probabilities";
+            this.btn_insertProbabilities.UseVisualStyleBackColor = false;
+            this.btn_insertProbabilities.Click += new System.EventHandler(this.btn_insertProbabilities_Click);
+            // 
             // Urn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(259, 362);
+            this.ClientSize = new System.Drawing.Size(259, 432);
+            this.Controls.Add(this.btn_insertProbabilities);
+            this.Controls.Add(this.cb_simulationProcess);
+            this.Controls.Add(this.lb_simulationProcess);
+            this.Controls.Add(this.lb_grafico);
             this.Controls.Add(this.tb_simulations);
             this.Controls.Add(this.lb_simulations);
             this.Controls.Add(this.op_graficos);
@@ -301,6 +355,10 @@
         private System.Windows.Forms.TextBox tb_simulations;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.Label lb_grafico;
+        private System.Windows.Forms.Label lb_simulationProcess;
+        private System.Windows.Forms.ComboBox cb_simulationProcess;
+        private System.Windows.Forms.Button btn_insertProbabilities;
     }
 }
 

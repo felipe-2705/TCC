@@ -10,13 +10,13 @@ namespace UrnPolya
     public class Urn
     {
 
-        private int[] balls; //  it keeps the quantity of each color of balls. each colors is identified by their index in the array.
-        private int[] initBalls; // it keeps the init quantity of balls.
-        private int totalcolorsnumber; // it keeps the number of diferente colors in the urn.
-        private int totalballs;// total of balls in the urn.
-        private int[,] matrix; // matrix of reposition.
-        private double[,] proportions; // it keeps the proportions of each color allong the execution of the simulation.
-        private List<int> urn; // the urn it self is represented by a list of balls.
+        protected int[] balls; //  it keeps the quantity of each color of balls. each colors is identified by their index in the array.
+        protected int[] initBalls; // it keeps the init quantity of balls.
+        protected int totalcolorsnumber; // it keeps the number of diferente colors in the urn.
+        protected int totalballs;// total of balls in the urn.
+        protected int[,] matrix; // matrix of reposition.
+        protected double[,] proportions; // it keeps the proportions of each color allong the execution of the simulation.
+        protected List<int> urn; // the urn it self is represented by a list of balls.
 
         public Urn(int[,] m, int[] b)
         {
@@ -78,52 +78,48 @@ namespace UrnPolya
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
-            for (int i = 0; i < this.totalcolorsnumber; i++)
+            for (int color = 0; color < this.totalcolorsnumber; color++)
             {
-                this.proportions[0, i] = this.getProportionOfBall(i);
+                this.proportions[0, color] = this.getProportionOfBall(color);
             }
-            for (int i = 1; i <= steps; i++)
+            for (int iterations = 1; iterations <= steps; iterations++)
             {
                 int index = rm.Next(this.totalballs);
                 int color = this.urn[index];
-                for (int j = 0; j < this.totalcolorsnumber; j++)
-                {
-                    this.balls[color] += this.matrix[j, color];
-                    this.totalballs += this.matrix[j, color];
-                    for (int k = 0; k < this.matrix[j, color]; k++)
-                    {
-                        this.urn.Add(j);
-                    }
-                    this.proportions[i, j] = this.getProportionOfBall(j);
-                }
+                this.insert_balls(iterations, color);
                 
             }
             return true;
+        }
+
+        protected void insert_balls(int iteration, int column)
+        {
+            for (int color = 0; color < this.totalcolorsnumber; color++)
+            {
+                this.balls[color] += this.matrix[color, column];
+                this.totalballs += this.matrix[color, column];
+                for (int c = 0; c < this.matrix[color, column]; c++)
+                {
+                    this.urn.Add(color);
+                }
+                this.proportions[iteration, color] = this.getProportionOfBall(color);
+            }
         }
 
         public Boolean simulation(int steps, BackgroundWorker b)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
-            for (int i = 0; i < this.totalcolorsnumber; i++)
+            for (int color = 0; color < this.totalcolorsnumber; color++)
             {
-                this.proportions[0, i] = this.getProportionOfBall(i);
+                this.proportions[0, color] = this.getProportionOfBall(color);
             }
-            for (int i = 1; i <= steps; i++)
+            for (int iterations = 1; iterations <= steps; iterations++)
             {
                 int index = rm.Next(this.totalballs);
                 int color = this.urn[index];
-                for (int j = 0; j < this.totalcolorsnumber; j++)
-                {
-                    this.balls[color] += this.matrix[j, color];
-                    this.totalballs += this.matrix[j, color];
-                    for (int k = 0; k < this.matrix[j, color]; k++)
-                    {
-                        this.urn.Add(j);
-                    }
-                    this.proportions[i, j] = this.getProportionOfBall(j);
-                }
-                b.ReportProgress((i * 100) / steps);
+                this.insert_balls(iterations, color);
+                b.ReportProgress((iterations * 100) / steps);
             }
             return true;
         }
@@ -213,7 +209,185 @@ namespace UrnPolya
         }
     }
 
-   
+
+    ///////////////////////////////////////////////// model with a bad player urn/ lapso de memoria ////////////////////////////////////////////////////////
     
-   
+    public class Urn_memory_lapse:Urn
+    {
+        private double LapseProbability;
+        private double[] BaseProbabilityColor;
+
+         public Urn_memory_lapse(int[,] m, int[] b, double LapseProbability, double[] BaseProbabilityColor):base(m,b) // LapseProbability is the chance of forgot the past on that iteration, Base
+        {
+            this.LapseProbability = LapseProbability;
+            this.BaseProbabilityColor = BaseProbabilityColor;
+        }
+
+        public  new Boolean simulation(int steps, BackgroundWorker b)
+        {
+            Random rm = new Random();
+            this.proportions = new double[steps + 1, this.totalcolorsnumber];
+            for (int i = 0; i < this.totalcolorsnumber; i++)
+            {
+                this.proportions[0, i] = this.getProportionOfBall(i);  // init balls proportions 
+            }
+
+            double memorylapse;
+            double p;
+            double aux=0.0;
+            for (int iteration = 1; iteration <= steps; iteration++)
+            {
+                memorylapse = rm.NextDouble();
+                if (memorylapse <= this.LapseProbability)
+                {
+                    //memory lapse steps 
+                    p = rm.NextDouble();
+                    for (int column = 0; column < this.totalcolorsnumber; column++)
+                    {
+                        aux += this.BaseProbabilityColor[column];
+                        if (aux <= p)
+                        {
+                            this.insert_balls(iteration, column);
+                            break;
+                        }
+                    }
+
+                }
+                else
+                {
+                    //past looking steps
+                    int index = rm.Next(this.totalballs);
+                    int Column_color = this.urn[index];
+                    for (int Row_color = 0; Row_color < this.totalcolorsnumber; Row_color++)
+                    {
+                        this.balls[Row_color] += this.matrix[Row_color, Column_color];
+                        this.totalballs += this.matrix[Row_color, Column_color];
+                        for (int k = 0; k < this.matrix[Row_color, Column_color]; k++)
+                        {
+                            this.urn.Add(Row_color);
+                        }
+                        this.proportions[iteration, Row_color] = this.getProportionOfBall(Row_color);
+                    }
+                    b.ReportProgress((iteration * 100) / steps);
+                }
+            }
+            return true;
+
+
+
+
+        }
+    }
+
+
+    public class Urn_memory: Urn
+    {
+        private int[] history;
+        private double agree_probability;
+        
+        public Urn_memory(int[,] m, int[] b, double agree_probability) : base(m, b) // LapseProbability is the chance of forgot the past on that iteration, Base
+        {
+            this.agree_probability = agree_probability;
+       
+        }
+
+        public new Boolean simulation(int steps,BackgroundWorker b)
+        {
+            Random rm = new Random();
+            this.proportions = new double[steps + 1, this.totalcolorsnumber];
+            this.history = new int[steps];
+            for (int color = 0; color < this.totalcolorsnumber; color++)
+            {
+                this.proportions[0, color] = this.getProportionOfBall(color);
+            }
+            for (int iterations = 1; iterations <= steps; iterations++)
+            {
+                int index = rm.Next(this.totalballs);
+                int color = this.urn[index];
+                this.insert_balls(iterations, color);
+                b.ReportProgress((iterations * 100) / steps);
+            }
+            return true;
+        }
+    }
+
+    public class Urn_memoryElefantwalk : Urn
+    {
+
+        private double agree_probability;
+        private double lapse;
+        public Urn_memoryElefantwalk(int[,] m, int[] b, double agree_probability,double Lapse) : base(m, b) // LapseProbability is the chance of forgot the past on that iteration, Base
+        {
+            this.agree_probability = agree_probability;
+            this.lapse = Lapse;
+
+        }
+
+        public new void insert_balls(int iterations, int color)
+        {
+            Random rm = new Random();
+            double p = rm.NextDouble();
+            if(p < this.agree_probability)
+            {
+                for (int c = 0; c < this.totalcolorsnumber; c++)
+                {
+                    this.balls[c] += this.matrix[c, color];
+                    this.totalballs += this.matrix[c, color];
+                    for (int i = 0; i < this.matrix[c, color]; i++)
+                    {
+                        this.urn.Add(c);
+                    }
+                    this.proportions[iterations, c] = this.getProportionOfBall(c);
+                }
+                return;
+            }
+            else
+            {
+                for(int i = 1; i <=this.totalcolorsnumber; i++)
+                {
+                    if (i != color)
+                    {
+                        if (p < ((this.agree_probability) + ((1 - this.agree_probability) / (this.totalcolorsnumber - 1)) * i))
+                        {
+                            for (int c = 0; c < this.totalcolorsnumber; c++)
+                            {
+                                this.balls[c] += this.matrix[c, i];
+                                this.totalballs += this.matrix[c, i];
+                                for (int k = 0; k < this.matrix[c, i]; k++)
+                                {
+                                    this.urn.Add(c);
+                                }
+                                this.proportions[iterations, c] = this.getProportionOfBall(c);
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        public new Boolean simulation(int steps, BackgroundWorker b)
+        {
+            Random rm = new Random();
+            this.proportions = new double[steps + 1, this.totalcolorsnumber];
+            for (int color = 0; color < this.totalcolorsnumber; color++)
+            {
+                this.proportions[0, color] = this.getProportionOfBall(color);
+            }
+            for (int iterations = 1; iterations <= steps; iterations++)
+            {
+                int index = rm.Next(this.totalballs);
+                if (rm.NextDouble() < this.lapse)
+                {
+                    this.insert_balls(iterations,0);
+                }
+                else
+                {
+                    int color = this.urn[index];
+                    this.insert_balls(iterations, color);
+                }
+                b.ReportProgress((iterations * 100) / steps);
+            }
+            return true;
+        }
+    }
 }
