@@ -311,80 +311,50 @@ namespace UrnPolya
         }
     }
 
-    public class Urn_memoryElefantwalk : Urn
+
+    // Model with a probability 
+    public class Urn_probability: Urn
     {
-
-        private double agree_probability;
-        private double lapse;
-        public Urn_memoryElefantwalk(int[,] m, int[] b, double agree_probability,double Lapse) : base(m, b) // LapseProbability is the chance of forgot the past on that iteration, Base
+        private double[,] agree_matrix;
+  
+        public Urn_probability(int[,]matriz, int[] balls, double[,] agree_matrix) : base(matriz,balls) // agree_matrix is the matrix with the information of probabilities of all colors 
         {
-            this.agree_probability = agree_probability;
-            this.lapse = Lapse;
-
+            this.agree_matrix = agree_matrix;
         }
 
-        public new void insert_balls(int iterations, int color)
+        private int check_probability(int color)    // return the color of the probability agreed or not to the in color;
         {
+  
             Random rm = new Random();
-            double p = rm.NextDouble();
-            if(p < this.agree_probability)
+            double prob = rm.NextDouble();
+            double diff = 1 / this.totalcolorsnumber; // size of each interval 
+            for(int c = 0; c < this.totalcolorsnumber; c++)
             {
-                for (int c = 0; c < this.totalcolorsnumber; c++)
-                {
-                    this.balls[c] += this.matrix[c, color];
-                    this.totalballs += this.matrix[c, color];
-                    for (int i = 0; i < this.matrix[c, color]; i++)
-                    {
-                        this.urn.Add(c);
-                    }
-                    this.proportions[iterations, c] = this.getProportionOfBall(c);
-                }
-                return;
+                if((this.agree_matrix[c,color]- diff)< prob && prob < this.agree_matrix[c, color])
+                   {
+                    return c;
+                   }
             }
-            else
-            {
-                for(int i = 1; i <=this.totalcolorsnumber; i++)
-                {
-                    if (i != color)
-                    {
-                        if (p < ((this.agree_probability) + ((1 - this.agree_probability) / (this.totalcolorsnumber - 1)) * i))
-                        {
-                            for (int c = 0; c < this.totalcolorsnumber; c++)
-                            {
-                                this.balls[c] += this.matrix[c, i];
-                                this.totalballs += this.matrix[c, i];
-                                for (int k = 0; k < this.matrix[c, i]; k++)
-                                {
-                                    this.urn.Add(c);
-                                }
-                                this.proportions[iterations, c] = this.getProportionOfBall(c);
-                            }
-                            return;
-                        }
-                    }
-                }
-            }
+            return -1; // error probability is wrong 
         }
+
+
         public new Boolean simulation(int steps, BackgroundWorker b)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
-            for (int color = 0; color < this.totalcolorsnumber; color++)
+            int index;
+            int color;
+            for (color = 0; color < this.totalcolorsnumber; color++)
             {
                 this.proportions[0, color] = this.getProportionOfBall(color);
             }
             for (int iterations = 1; iterations <= steps; iterations++)
             {
-                int index = rm.Next(this.totalballs);
-                if (rm.NextDouble() < this.lapse)
-                {
-                    this.insert_balls(iterations,0);
-                }
-                else
-                {
-                    int color = this.urn[index];
-                    this.insert_balls(iterations, color);
-                }
+                index = rm.Next(this.totalballs);
+                color = this.urn[index];
+                color = this.check_probability(color); // return same color if agreed , diferente color if don't
+                this.insert_balls(iterations, color);
                 b.ReportProgress((iterations * 100) / steps);
             }
             return true;
