@@ -26,7 +26,6 @@ namespace SimuladorUrnPolya
             this.data = data;
             InitializeComponent();
             this.Linechart();
-
         }
 
         public F_grafico(List<double[]> data, List<string> colors)
@@ -60,7 +59,7 @@ namespace SimuladorUrnPolya
                 Grafico.Series[color].ChartType = SeriesChartType.Line;
                 Grafico.Series[color].Color = Color.FromName(color);
                 Grafico.Series[color].Points.DataBindXY(x,y);
-               
+             
             }
             
 

@@ -74,7 +74,7 @@ namespace UrnPolya
         }
 
       
-        public Boolean simulation(int steps)
+        protected Boolean simulation(int steps)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
@@ -106,7 +106,7 @@ namespace UrnPolya
             }
         }
 
-        public Boolean simulation(int steps, BackgroundWorker b)
+        public  virtual Boolean simulation(int steps, BackgroundWorker b)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
@@ -223,7 +223,7 @@ namespace UrnPolya
             this.BaseProbabilityColor = BaseProbabilityColor;
         }
 
-        public  new Boolean simulation(int steps, BackgroundWorker b)
+        public  override Boolean simulation(int steps, BackgroundWorker b)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
@@ -291,7 +291,7 @@ namespace UrnPolya
        
         }
 
-        public new Boolean simulation(int steps,BackgroundWorker b)
+        public override Boolean simulation(int steps,BackgroundWorker b)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];
@@ -326,20 +326,21 @@ namespace UrnPolya
         {
   
             Random rm = new Random();
-            double prob = rm.NextDouble();
-            double diff = 1 / this.totalcolorsnumber; // size of each interval 
+            double prob = rm.NextDouble(); // generates a random number between 0 and 1
+            double sum = 0.0;
             for(int c = 0; c < this.totalcolorsnumber; c++)
             {
-                if((this.agree_matrix[c,color]- diff)< prob && prob < this.agree_matrix[c, color])
+                if(prob < sum + this.agree_matrix[c,color])
                    {
                     return c;
                    }
+                sum += this.agree_matrix[c, color];
             }
             return -1; // error probability is wrong 
         }
 
 
-        public new Boolean simulation(int steps, BackgroundWorker b)
+        public override Boolean simulation(int steps, BackgroundWorker b)
         {
             Random rm = new Random();
             this.proportions = new double[steps + 1, this.totalcolorsnumber];

@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Urn));
             this.Colors_listCheckBox = new System.Windows.Forms.CheckedListBox();
-            this.btn_defineMatrix = new System.Windows.Forms.Button();
+            this.btn_defineRepositionMatrix = new System.Windows.Forms.Button();
             this.btn_Confirm = new System.Windows.Forms.Button();
             this.SimulationProgress = new System.Windows.Forms.ProgressBar();
             this.lb_steps = new System.Windows.Forms.Label();
@@ -51,6 +51,7 @@
             this.lb_simulationProcess = new System.Windows.Forms.Label();
             this.cb_simulationProcess = new System.Windows.Forms.ComboBox();
             this.btn_insertProbabilities = new System.Windows.Forms.Button();
+            this.btn_defineProbabilitiesMatrix = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,22 +76,22 @@
             this.Colors_listCheckBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.Colors_listCheckBox_ItemCheck);
             this.Colors_listCheckBox.SelectedIndexChanged += new System.EventHandler(this.Colors_listCheckBox_SelectedIndexChanged);
             // 
-            // btn_defineMatrix
+            // btn_defineRepositionMatrix
             // 
-            this.btn_defineMatrix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.btn_defineRepositionMatrix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_defineMatrix.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.btn_defineMatrix.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_defineMatrix.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
-            this.btn_defineMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_defineMatrix.Location = new System.Drawing.Point(2, 325);
-            this.btn_defineMatrix.Name = "btn_defineMatrix";
-            this.btn_defineMatrix.Size = new System.Drawing.Size(254, 29);
-            this.btn_defineMatrix.TabIndex = 7;
-            this.btn_defineMatrix.Text = "Define Matrix";
-            this.btn_defineMatrix.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btn_defineMatrix.UseVisualStyleBackColor = false;
-            this.btn_defineMatrix.Click += new System.EventHandler(this.btn_defineMatrix_Click);
+            this.btn_defineRepositionMatrix.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btn_defineRepositionMatrix.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_defineRepositionMatrix.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
+            this.btn_defineRepositionMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_defineRepositionMatrix.Location = new System.Drawing.Point(2, 325);
+            this.btn_defineRepositionMatrix.Name = "btn_defineRepositionMatrix";
+            this.btn_defineRepositionMatrix.Size = new System.Drawing.Size(254, 29);
+            this.btn_defineRepositionMatrix.TabIndex = 7;
+            this.btn_defineRepositionMatrix.Text = "Define Reposition Matrix";
+            this.btn_defineRepositionMatrix.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btn_defineRepositionMatrix.UseVisualStyleBackColor = false;
+            this.btn_defineRepositionMatrix.Click += new System.EventHandler(this.btn_defineMatrix_Click);
             // 
             // btn_Confirm
             // 
@@ -100,7 +101,7 @@
             this.btn_Confirm.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_Confirm.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
             this.btn_Confirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Confirm.Location = new System.Drawing.Point(2, 360);
+            this.btn_Confirm.Location = new System.Drawing.Point(2, 394);
             this.btn_Confirm.Name = "btn_Confirm";
             this.btn_Confirm.Size = new System.Drawing.Size(254, 27);
             this.btn_Confirm.TabIndex = 8;
@@ -114,7 +115,7 @@
             this.SimulationProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SimulationProgress.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.SimulationProgress.Location = new System.Drawing.Point(2, 393);
+            this.SimulationProgress.Location = new System.Drawing.Point(2, 436);
             this.SimulationProgress.Name = "SimulationProgress";
             this.SimulationProgress.Size = new System.Drawing.Size(254, 27);
             this.SimulationProgress.TabIndex = 9;
@@ -213,8 +214,8 @@
             // 
             this.op_graficos.FormattingEnabled = true;
             this.op_graficos.Items.AddRange(new object[] {
-            "Corrida de cores",
-            "Probabilidade de razoes para cada cor"});
+            "Colors Run",
+            "Ration Colors"});
             this.op_graficos.Location = new System.Drawing.Point(128, 5);
             this.op_graficos.Name = "op_graficos";
             this.op_graficos.Size = new System.Drawing.Size(121, 21);
@@ -283,7 +284,8 @@
             this.cb_simulationProcess.FormattingEnabled = true;
             this.cb_simulationProcess.Items.AddRange(new object[] {
             "Standard",
-            "Memory Lapse"});
+            "Memory Lapse",
+            "Random Urn"});
             this.cb_simulationProcess.Location = new System.Drawing.Point(128, 42);
             this.cb_simulationProcess.Name = "cb_simulationProcess";
             this.cb_simulationProcess.Size = new System.Drawing.Size(121, 21);
@@ -296,20 +298,38 @@
             this.btn_insertProbabilities.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_insertProbabilities.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
             this.btn_insertProbabilities.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_insertProbabilities.Location = new System.Drawing.Point(62, 76);
+            this.btn_insertProbabilities.Location = new System.Drawing.Point(29, 76);
             this.btn_insertProbabilities.Name = "btn_insertProbabilities";
-            this.btn_insertProbabilities.Size = new System.Drawing.Size(131, 27);
+            this.btn_insertProbabilities.Size = new System.Drawing.Size(214, 27);
             this.btn_insertProbabilities.TabIndex = 19;
-            this.btn_insertProbabilities.Text = "Insert Probabilities";
+            this.btn_insertProbabilities.Text = "Insert Lapse Probabilities";
             this.btn_insertProbabilities.UseVisualStyleBackColor = false;
             this.btn_insertProbabilities.Click += new System.EventHandler(this.btn_insertProbabilities_Click);
+            // 
+            // btn_defineProbabilitiesMatrix
+            // 
+            this.btn_defineProbabilitiesMatrix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_defineProbabilitiesMatrix.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btn_defineProbabilitiesMatrix.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_defineProbabilitiesMatrix.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Highlight;
+            this.btn_defineProbabilitiesMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_defineProbabilitiesMatrix.Location = new System.Drawing.Point(2, 360);
+            this.btn_defineProbabilitiesMatrix.Name = "btn_defineProbabilitiesMatrix";
+            this.btn_defineProbabilitiesMatrix.Size = new System.Drawing.Size(254, 29);
+            this.btn_defineProbabilitiesMatrix.TabIndex = 20;
+            this.btn_defineProbabilitiesMatrix.Text = "Define Probability Matrix";
+            this.btn_defineProbabilitiesMatrix.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btn_defineProbabilitiesMatrix.UseVisualStyleBackColor = false;
+            this.btn_defineProbabilitiesMatrix.Click += new System.EventHandler(this.btn_defineProbabilityMatrix_Click);
             // 
             // Urn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(259, 432);
+            this.ClientSize = new System.Drawing.Size(259, 475);
+            this.Controls.Add(this.btn_defineProbabilitiesMatrix);
             this.Controls.Add(this.btn_insertProbabilities);
             this.Controls.Add(this.cb_simulationProcess);
             this.Controls.Add(this.lb_simulationProcess);
@@ -321,7 +341,7 @@
             this.Controls.Add(this.tb_Steps);
             this.Controls.Add(this.SimulationProgress);
             this.Controls.Add(this.btn_Confirm);
-            this.Controls.Add(this.btn_defineMatrix);
+            this.Controls.Add(this.btn_defineRepositionMatrix);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
@@ -339,7 +359,7 @@
         #endregion
 
         private System.Windows.Forms.CheckedListBox Colors_listCheckBox;
-        private System.Windows.Forms.Button btn_defineMatrix;
+        private System.Windows.Forms.Button btn_defineRepositionMatrix;
         private System.Windows.Forms.Button btn_Confirm;
         private System.Windows.Forms.ProgressBar SimulationProgress;
         private System.Windows.Forms.Label lb_steps;
@@ -359,6 +379,7 @@
         private System.Windows.Forms.Label lb_simulationProcess;
         private System.Windows.Forms.ComboBox cb_simulationProcess;
         private System.Windows.Forms.Button btn_insertProbabilities;
+        private System.Windows.Forms.Button btn_defineProbabilitiesMatrix;
     }
 }
 

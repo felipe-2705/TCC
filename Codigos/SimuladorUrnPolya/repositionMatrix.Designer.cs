@@ -1,6 +1,6 @@
 ﻿namespace SimuladorUrnPolya
 {
-    partial class F_matrix
+    partial class F_repositionMatrix
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_matrix));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_repositionMatrix));
             this.panel_buttons = new System.Windows.Forms.Panel();
             this.btn_confirm = new System.Windows.Forms.Button();
             this.btn_cancel = new System.Windows.Forms.Button();

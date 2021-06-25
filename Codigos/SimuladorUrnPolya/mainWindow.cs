@@ -21,6 +21,7 @@ namespace SimuladorUrnPolya
         public List<string> ColorsUsedList = new List<string>();
         public int[] Colorsnumbers;
         public int[,] repositionMatrix;
+        public double[,] probabilityMatrix;
         private string selectChartType ;
         private string selectSimulationType;
         private int steps;
@@ -44,13 +45,69 @@ namespace SimuladorUrnPolya
             
         }
 
-       
 
+        #region Window build
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
+        private void btn_Confirm_Click(object sender, EventArgs e)
+        {
+            if (this.ColorsTotalNumber < 2 || this.repositionMatrix == null || this.Colorsnumbers == null)
+            {
+                MessageBox.Show("Please, insert all necessary information before continue your simulation");
+                return;
+            }
+
+
+
+            switch (this.selectChartType)
+            {
+                case "Colors Run":
+                    this.backgroundWorker2.RunWorkerAsync();
+                    break;
+                case "Ration Colors":
+                    this.backgroundWorker.RunWorkerAsync();
+                    break;
+            }
+        }
+
+        private void lb_steps_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void tb_Steps_TextChanged(object sender, EventArgs e)
+       {
+
+        }
+
+        private void Colors_listCheckBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                this.ColorsUsedList.Add(Colors_listCheckBox.Items[e.Index].ToString());
+
+            }
+            this.ColorsTotalNumber = this.ColorsUsedList.Count;
+
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.selectChartType = op_graficos.Text;
+        }
+        
+
+        private void cb_simulationProcess_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.selectSimulationType = this.cb_simulationProcess.Text;
+        }
+        #endregion
         #region Colors Fuctions
 
         private void lb_BallsColors_Click(object sender, EventArgs e)
@@ -128,76 +185,34 @@ namespace SimuladorUrnPolya
             
         }
 
-       
-
         private void btn_defineMatrix_Click(object sender, EventArgs e)
         {   
             if(this.repositionMatrix == null)
             {
                 this.repositionMatrix = new int[this.ColorsTotalNumber, this.ColorsTotalNumber];
             }
-            F_matrix f_matrix = new F_matrix(this.ColorsUsedList, ref this.repositionMatrix);
+            F_repositionMatrix f_matrix = new F_repositionMatrix(this.ColorsUsedList, ref this.repositionMatrix);
             f_matrix.ShowDialog();
 
         }
+
+        private void btn_defineProbabilityMatrix_Click(object sender, EventArgs e)
+        {
+            if (this.probabilityMatrix == null)
+            {
+                this.probabilityMatrix= new double[this.ColorsTotalNumber, this.ColorsTotalNumber];
+            }
+            F_probabilityMatrixWindow f_matrix = new F_probabilityMatrixWindow(this.ColorsUsedList, ref this.probabilityMatrix);
+            f_matrix.ShowDialog();
+        }
+        private void btn_insertProbabilities_Click(object sender, EventArgs e)
+        {
+            this.probabilities = new double[this.ColorsTotalNumber];
+            F_insertProbabilities f = new F_insertProbabilities(this.ColorsUsedList, ref this.memorylapse_probability, ref this.probabilities);
+            f.ShowDialog();
+        }
         #endregion
-        private void btn_Confirm_Click(object sender, EventArgs e)
-        {
-            if (this.ColorsTotalNumber < 2 || this.repositionMatrix == null || this.Colorsnumbers == null)
-            {
-                MessageBox.Show("Please, insert all necessary information before continue if your simulation");
-                return;
-            }
 
-        
-
-            switch (this.selectChartType) 
-            {
-                case "Corrida de cores":
-                    this.backgroundWorker2.RunWorkerAsync();
-                    break;
-                case "Probabilidade de razoes para cada cor":
-                    this.backgroundWorker.RunWorkerAsync();
-                    break;
-            }
-        }
-
-      
-
-        
-
-     
-
-        private void lb_steps_Click(object sender, EventArgs e)
-        {
-
-        }
-
-       
-        private void tb_Steps_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        
-
-        private void Colors_listCheckBox_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-
-            if (e.NewValue == CheckState.Checked)
-            {
-                this.ColorsUsedList.Add(Colors_listCheckBox.Items[e.Index].ToString());
-
-            }
-            this.ColorsTotalNumber = this.ColorsUsedList.Count;
-
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.selectChartType = op_graficos.Text;
-        }
         #region Probability Chart Worker functions
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -218,40 +233,21 @@ namespace SimuladorUrnPolya
 
         public void PrintChart(BackgroundWorker b)
         {
-
             if (!int.TryParse(this.tb_Steps.Text, out this.steps))
             {
                 MessageBox.Show("Please insert a valid value to the steps box");
                 b.CancelAsync();
                 return;
             }
-
             if (!int.TryParse(this.tb_simulations.Text, out this.simulations))
             {
                 MessageBox.Show("Please insert a valid value to the simulations box");
                 b.CancelAsync();
                 return;
             }
-            UrnPolya.Urn a;
-            switch (this.selectSimulationType)
-            {
-                case "Memory Lapse":
-                    if(this.probabilities == null)
-                    {
-                        MessageBox.Show("Please first insert the probabilities");
-                        return;
-                    }
-                    a = new UrnPolya.Urn_memory_lapse(this.repositionMatrix, this.Colorsnumbers, this.memorylapse_probability, this.probabilities);
-                    break;
-                default:
-                    a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
-                    break;
-                    
-
-            }
+            UrnPolya.Urn a = this.selected_urn_process();
+            if(a == null) { return; }
             List<double[]> r = UrnPolya.Urn.probability_of_colors_ration(a, steps, simulations, b);
-
-
             F_grafico f = new F_grafico(r, this.ColorsUsedList);
             f.ShowDialog();
         }
@@ -283,23 +279,10 @@ namespace SimuladorUrnPolya
                 b.CancelAsync();
                 return;
             }
-
-            UrnPolya.Urn a;
-            switch (this.selectSimulationType)
+            UrnPolya.Urn a = this.selected_urn_process();
+            if(a == null)
             {
-                case "Memory Lapse":
-                    if (this.probabilities == null)
-                    {
-                        MessageBox.Show("Please first insert the probabilities");
-                        return;
-                    }
-                    a = new UrnPolya.Urn_memory_lapse(this.repositionMatrix, this.Colorsnumbers, this.memorylapse_probability, this.probabilities);
-                    break;
-                default:
-                    a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
-                    break;
-
-
+                return;
             }
             a.simulation(steps, this.backgroundWorker2);
             double[,] result = a.getProportions();
@@ -309,16 +292,33 @@ namespace SimuladorUrnPolya
         }
         #endregion
 
-        private void btn_insertProbabilities_Click(object sender, EventArgs e)
+         private UrnPolya.Urn selected_urn_process()
         {
-            this.probabilities = new double[this.ColorsTotalNumber];
-            F_insertProbabilities f = new F_insertProbabilities(this.ColorsUsedList, ref this.memorylapse_probability,ref this.probabilities);
-            f.ShowDialog();
+            UrnPolya.Urn a = null;
+            switch (this.selectSimulationType)
+            {
+                case "Random Urn":
+                    if (this.probabilityMatrix == null)
+                    {
+                        MessageBox.Show("Please first insert the probabilityMatrix");
+                        return a;
+                    }
+                    a = new UrnPolya.Urn_probability(this.repositionMatrix, this.Colorsnumbers, this.probabilityMatrix);
+                    break;
+                case "Memory Lapse":
+                    if (this.probabilities == null)
+                    {
+                        MessageBox.Show("Please first insert the probabilities");
+                        return a;
+                    }
+                    a = new UrnPolya.Urn_memory_lapse(this.repositionMatrix, this.Colorsnumbers, this.memorylapse_probability, this.probabilities);
+                    break;
+                default:
+                    a = new UrnPolya.Urn(this.repositionMatrix, this.Colorsnumbers);
+                    break;
+            }
+            return a;
         }
-
-        private void cb_simulationProcess_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.selectSimulationType = this.cb_simulationProcess.Text;
-        }
+       
     }
 }
