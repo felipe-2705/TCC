@@ -18,7 +18,6 @@ namespace SimuladorUrnPolya
         List<string> Colors;
         int matrixSize;
 
-        List<double[]> probabilities;
         public F_grafico(double[,] data, List<string> colors, int matrixSize)
         {
             this.Colors = colors;
@@ -28,12 +27,12 @@ namespace SimuladorUrnPolya
             this.Linechart();
         }
 
-        public F_grafico(List<double[]> data, List<string> colors)
+        public F_grafico(double[,] data, List<string> colors)
         {
-            this.probabilities = data;
+            this.data = data;
             this.Colors = colors;
             InitializeComponent();
-            this.LinechartProbabilities();
+            this.LineChartAvarageRatio();
         }
 
         private void Linechart()
@@ -41,14 +40,16 @@ namespace SimuladorUrnPolya
             List<double> x = new List<double>();
             List<double> y = new List<double>();
 
+
             Grafico.Titles.Add("Colors Run");
             Grafico.Titles[0].Font = new Font("Arial", 14);
             Grafico.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            Grafico.ChartAreas[0].AxisX.Title = "Step";
             Grafico.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
-
-            for(int j = 0; j < this.Colors.Count; j++)
+            Grafico.ChartAreas[0].AxisY.Title = "proportion";
+            for (int j = 0; j < this.Colors.Count; j++)
             {   x.Clear();
-                y.Clear();
+                y.Clear(); 
                 for(int i =0;i<this.matrixSize; i++)
                 {
                     y.Add(data[i,j]);
@@ -59,32 +60,34 @@ namespace SimuladorUrnPolya
                 Grafico.Series[color].ChartType = SeriesChartType.Line;
                 Grafico.Series[color].Color = Color.FromName(color);
                 Grafico.Series[color].Points.DataBindXY(x,y);
+                Grafico.Series[color].LegendText = "proportion color " + j.ToString();
              
             }
             
 
         }
 
-        private void LinechartProbabilities()
+        private void LineChartAvarageRatio()
         {
             List<double> x = new List<double>();
             List<double> y = new List<double>();
 
-            Grafico.Titles.Add("Probabilities ");
+            Grafico.Titles.Add("Final proportion per execution");
             Grafico.Titles[0].Font = new Font("Arial", 14);
             Grafico.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            Grafico.ChartAreas[0].AxisX.Title = "Execution";
             Grafico.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
-            int valor_pos = this.Colors.Count;
+            Grafico.ChartAreas[0].AxisY.Title = "proportion";
 
             for (int j = 0; j < this.Colors.Count; j++)
             {
                 x.Clear();
                 y.Clear();
-                for (int i = 0; i < this.probabilities.Count; i++)
+                for (int i = 0; i < this.data.GetLength(0); i++)
                 {
                     
-                        x.Add(Math.Round(this.probabilities[i][valor_pos],4));
-                        y.Add(this.probabilities[i][j]);
+                        x.Add(i);
+                        y.Add(this.data[i,j]);
 
                     
                 }
@@ -93,7 +96,7 @@ namespace SimuladorUrnPolya
                 Grafico.Series[color].ChartType = SeriesChartType.Line;
                 Grafico.Series[color].Color = Color.FromName(color);
                 Grafico.Series[color].Points.DataBindXY(x, y);
-
+                Grafico.Series[color].LegendText = "proportion color " + j.ToString();
             }
 
 

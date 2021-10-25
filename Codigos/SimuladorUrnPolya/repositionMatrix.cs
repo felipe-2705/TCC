@@ -41,7 +41,7 @@ namespace SimuladorUrnPolya
             this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tableLayoutPanel1.ColumnCount = this.size+1;
-            this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.AddColumns;
+            this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.AddRows;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = this.size + 1;
@@ -79,7 +79,7 @@ namespace SimuladorUrnPolya
                     tb.Text = this.matrix[i-1,j-1].ToString();
                     tb.Size = new Size(50, 50);
                     tb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-                    tableLayoutPanel1.Controls.Add(tb, i, j);
+                    tableLayoutPanel1.Controls.Add(tb, j, i);
                     this.tb_handler[i-1, j-1] = tb;
 
                 }

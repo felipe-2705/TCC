@@ -16,8 +16,8 @@ namespace SimuladorUrnPolya
         List<string> colors;
         double[] probabilities;
         List<TextBox> tb_colors;
-        double memorylapses;
-        public F_insertProbabilities(List<string> colors, ref double memoryLapses_probability,ref double[] probabilities)
+        double [] memorylapses;
+        public F_insertProbabilities(List<string> colors, ref double[] memoryLapses_probability,ref double[] probabilities)
         {
             this.colors = colors;
             this.probabilities = probabilities;
@@ -34,6 +34,9 @@ namespace SimuladorUrnPolya
         private void insert_components()
         {
             tb_colors = new List<TextBox>();
+            this.tb_probability.Text = this.memorylapses[0].ToString(System.Globalization.CultureInfo.InvariantCulture);
+            this.tb_probability.TextAlign = this.tb_probability.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            int i = 0;
             foreach (string color in colors)
             {   //creating a label to color name
                 Label lb = new Label();
@@ -41,8 +44,8 @@ namespace SimuladorUrnPolya
                 lb.Size = new Size(50, 20);
                 //textBox to insert the desired inital value to that color 
                 TextBox tb = new TextBox();
-                tb.Text = Math.Round((1.0/this.colors.Count),2).ToString();
-                tb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+                tb.Text = this.probabilities[i++].ToString(System.Globalization.CultureInfo.InvariantCulture);
+                tb.TextAlign = tb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
                 tb.Size = new Size(100, 20);
                 tb_colors.Add(tb);
                 this.flowLayoutPanel.Controls.Add(lb);
@@ -73,7 +76,7 @@ namespace SimuladorUrnPolya
             foreach(TextBox tb in this.tb_colors)
             {
 
-                if (!double.TryParse(tb.Text, out value))
+                if (!double.TryParse(tb.Text, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out value))
                 {
                     MessageBox.Show("Insert a valid value ");
                     return;
@@ -88,13 +91,13 @@ namespace SimuladorUrnPolya
                 return;
             }
 
-            if(!double.TryParse(tb_probability.Text,out value))
+            if(!double.TryParse(tb_probability.Text, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out value))
             {
                 MessageBox.Show("Insert a valid value ");
                 return;
             }
 
-            this.memorylapses = value;
+            this.memorylapses[0] = value;
             i = 0;
             foreach(double d in values)
             {

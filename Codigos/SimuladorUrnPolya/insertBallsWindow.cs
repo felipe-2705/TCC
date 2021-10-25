@@ -29,6 +29,7 @@ namespace SimuladorUrnPolya
         private void addComponents()
         {
             tb_colors = new List<TextBox>();
+            int i = 0;
             foreach(string color in colors)
             {   //creating a label to color name
                 Label lb = new Label();
@@ -36,7 +37,7 @@ namespace SimuladorUrnPolya
                 lb.Size = new Size(50, 20);
                 //textBox to insert the desired inital value to that color 
                 TextBox tb = new TextBox();
-                tb.Text = "0";
+                tb.Text = this.colorsNumbers[i++].ToString();
                 tb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
                 tb.Size = new Size(100, 20);
                 tb_colors.Add(tb);

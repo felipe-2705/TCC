@@ -21,8 +21,9 @@ namespace UrnPolya
         public Urn(int[,] m, int[] b)
         {
 
-            this.balls = b;
             this.initBalls = b;
+            this.balls = new int[this.initBalls.Length];
+            for(int i = 0; i < this.balls.Length; i++) { this.balls[i] = this.initBalls[i]; }
             this.totalballs = 0;
             this.totalcolorsnumber = this.initBalls.Length;
             this.matrix = m;
@@ -58,7 +59,10 @@ namespace UrnPolya
         }
         public Boolean reset()
         {
-            this.balls = this.initBalls;
+            for (int i = 0;i< this.initBalls.Length; i++)
+            {
+                this.balls[i] = this.initBalls[i];
+            } 
             this.urn.Clear();
             this.totalballs = 0;
             this.proportions = null;
@@ -133,76 +137,25 @@ namespace UrnPolya
             return this.proportions;
         }
 
-        public static List<double[]> probability_of_colors_ration(Urn u,int steps, int iterations, BackgroundWorker b)
+        public static double[,] colors_AvarageRatio(Urn u,int steps, int iterations, BackgroundWorker b)
         {
-           List<double[]> result = new List<double[]>();
+            double[,] result = new double[iterations, u.totalcolorsnumber];
             int valor_pos = u.getTotalColorsNumber();
-            Boolean flag = false;
-
             for (int i = 0; i < iterations; i++)
             {
                 u.simulation(steps);
-               
-                
-
-                for (int j = 0; j < u.getTotalColorsNumber(); j++)
+                for (int color = 0; color < valor_pos; color++)
                 {
-                    double valor_cor = u.getProportionOfBall(j);
-                    flag = false;
-                    if (result.Count == 0)
-                    {
-                        double[] novo = new double[valor_pos + 1]; // esse valor guarda a razao e quantas vezes aquele valor apareceu para cada cor sendo que o index do array é a cor. 
-                        novo[valor_pos] = valor_cor;
-                        novo[j]++;
-                        result.Add(novo);
-                    }
-                    else
-                    {
-                        foreach (double[] aux in result)
-                        {
-                            if (Math.Floor(aux[valor_pos] * 1000) == (Math.Floor(valor_cor * 1000)))
-                            {
-                                result[result.IndexOf(aux)][j]++;
-                                flag = true;
-                                break;
-                            }
-                        }
 
-                        if (flag == false)
-                        {
-                            double[] novo = new double[valor_pos + 1];
-                            novo[valor_pos] = valor_cor;
-                            novo[j]++;
-                            result.Add(novo);
-                        }
-
-                    }
-                    
+                    result[i, color] = u.getProportionOfBall(color);
                 }
+
+
                 u.reset();
-                b.ReportProgress((i*100)/iterations);
+                b.ReportProgress((i+1 * 100) / iterations);
             }
-
-            bool ordenado = true;
-            for(int i =0;i< result.Count-1; i++)
-            {
-               for(int j = 0; j < result.Count - i-1; j++)
-                {
-                    if (result[j][valor_pos] > result[j + 1][valor_pos])
-                    {
-                        double[] aux = result[j];
-                        result[j]=result[j + 1];
-                        result[j + 1] = aux;
-                        ordenado = false;
-                    }
-                    
-                }
-                if (ordenado)
-                {
-                    break;
-                }
-            }
-
+            
+            
             return result;
 
 
@@ -242,10 +195,11 @@ namespace UrnPolya
                 {
                     //memory lapse steps 
                     p = rm.NextDouble();
+                    aux = 0.0;
                     for (int column = 0; column < this.totalcolorsnumber; column++)
                     {
                         aux += this.BaseProbabilityColor[column];
-                        if (aux <= p)
+                        if (p <= aux)
                         {
                             this.insert_balls(iteration, column);
                             break;

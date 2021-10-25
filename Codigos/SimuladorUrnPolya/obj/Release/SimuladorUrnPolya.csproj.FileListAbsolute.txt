@@ -1,0 +1,14 @@
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\bin\Release\SimuladorUrnPolya.exe.config
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\bin\Release\SimuladorUrnPolya.exe
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\bin\Release\SimuladorUrnPolya.pdb
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.Urn.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.F_InsertBallsNumbers.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.F_probabilityMatrixWindow.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.F_repositionMatrix.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.F_insertProbabilities.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.F_grafico.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.Properties.Resources.resources
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.csproj.GenerateResource.cache
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.csproj.CoreCompileInputs.cache
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.exe
+C:\projetos\TCC\Codigos\SimuladorUrnPolya\obj\Release\SimuladorUrnPolya.pdb
